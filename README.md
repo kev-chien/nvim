@@ -12,10 +12,10 @@ After the first step, the following steps are not in any proven or fully correct
     - on el8 instance, use `let g:python3_host_prog = "/usr/bin/python"`
     - use `pip3` which is linked to the python instance, to install the relevant packages
 3. install [vim-plug](https://github.com/junegunn/vim-plug)
-4. install [node>=12](https://nodejs.org/en/download) (for CoC)
     - run `nvim`
     - run `:so`
     - run `:PlugInstall`
+4. install [node>=12](https://nodejs.org/en/download) (for CoC)
 5. install [fzf](https://github.com/junegunn/fzf)
     - mac: `brew install fzf`
         - To install useful key bindings and fuzzy completion:
@@ -44,13 +44,14 @@ After the first step, the following steps are not in any proven or fully correct
     - in OSX terminal: run `cd ~/Library/Fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid Sans Mono Nerd Font Complete.otf`
     - in iTerm preferences: go to Profiles -> Text -> Font -> check "Use a different font for non-ASCII text → DroidSansMono Nerd Font"
     <!-- TODO: add screenshot -->
+<img width="565" alt="Screen Shot 2022-04-11 at 12 29 41 PM" src="https://user-images.githubusercontent.com/20323625/229319844-5b69ab21-7b25-4535-8106-0d8dabcd98ed.png">
+
 
 ## Cool Commands this gives you
 
 This is a list of commands you can use with these configs. Some of these come from base vim, but I threw them in here anyways.
 
-`C`: ctrl
-`S`: shift
+NOTE: `C`: ctrl, `S`: shift
 
 - `C-p` fzf
     - `C-t` new tab
@@ -71,7 +72,7 @@ This is a list of commands you can use with these configs. Some of these come fr
 - `space-w`: picks [nvim window](https://github.com/s1n7ax/nvim-window-picker), but doesn't work currently
 - `*` highlight occurrences of word cursor is on/ go to next occurence
 - `C-o` show most recently updated? opened? files
-- Tab, shift-tab: indent + un-indent
+- `tab`, `S-tab`: indent + un-indent
 - `[h` —> previous git hunk
 - `]h` —> next git hunk
 - `C-n` : multi-select
