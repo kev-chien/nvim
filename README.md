@@ -13,7 +13,6 @@ After the first step, the following steps are not in any proven or fully correct
     - use `pip3` which is linked to the python instance, to install the relevant packages
 3. install [vim-plug](https://github.com/junegunn/vim-plug)
     - run `nvim`
-    - run `:so`
     - run `:PlugInstall`
 4. install [node>=12](https://nodejs.org/en/download) (for CoC)
 5. install [fzf](https://github.com/junegunn/fzf)
