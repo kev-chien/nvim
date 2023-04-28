@@ -7,7 +7,7 @@ set autoread
 set shiftwidth=4
 set expandtab
 set smartindent
-set nu
+set nu rnu " hybrid line numbers
 set wrap
 set noswapfile
 set nobackup
@@ -22,7 +22,7 @@ set cursorline
 set isfname+=@-@
 set ls=0
 set laststatus=2
-set statusline=%F%m
+" set statusline=%F%m
 " Give more space for displaying messages.
 set cmdheight=1
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
@@ -32,7 +32,6 @@ set updatetime=300
 set shortmess+=c
 set colorcolumn=120
 set completeopt=menu
-set nornu
 " set foldmethod=indent
 " set foldlevel=1
 " set foldclose=all
@@ -40,7 +39,6 @@ set ignorecase
 set smartcase
 set spell spelllang=en_us
 set pastetoggle=<F2>
-set statusline+=\ col:\ %c
 
 " Set the filetype based on the filename, overriding any
 " 'filetype' that has already been set
@@ -86,15 +84,16 @@ nnoremap <leader>Y gg"+yG
 
 nnoremap <leader>d "_d
 vnoremap <leader>d "_d
-  
+
 " for command mode
 nnoremap <S-Tab> <<
 nnoremap <Tab> >>
 " for insert mode
 inoremap <S-Tab> <C-d>
 
-nnoremap <Leader>7 :e $MYVIMRC<cr>
-nnoremap <Leader>8 :e ~/.gitignore<cr>
+nnoremap <Leader>7 :tabnew $MYVIMRC<cr>
+nnoremap <Leader>8 :tabnew ~/.gitignore<cr>
+nnoremap <Leader>9 :tabnew ~/.bashrc<cr>
 command! ClearQuickfixList cexpr []
 nmap <leader>cf :ClearQuickfixList<cr>
 
@@ -118,7 +117,7 @@ vnoremap <silent> <c-l> :exe "tabn ".g:lasttab<cr>
 "      \ pumvisible() ? "\<C-n>" :
 "      \ <SID>check_back_space() ? "\<TAB>" :
 "      \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -140,50 +139,72 @@ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 "   inoremap <silent><expr> <c-@> coc#refresh()
 " endif
 " inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+                              " \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " xmap <leader>f  <Plug>(coc-format-selected)
 " nmap <leader>f  <Plug>(coc-format-selected)
 
 " PLUGINS
 call plug#begin('~/.vim/plugged')
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'https://gitlab.com/yorickpeterse/nvim-window.git'
 Plug 'nvie/vim-flake8'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-sleuth'
 Plug 'fisadev/vim-isort'
 Plug 'dkprice/vim-easygrep'
 Plug 'yegappan/mru'
 Plug 'mg979/vim-visual-multi'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'tpope/vim-commentary'
 Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-rooter'
 Plug 'mbbill/undotree'
 Plug 'airblade/vim-gitgutter'
 Plug 'joeytwiddle/sexy_scroller.vim'
 Plug 'mileszs/ack.vim'
-Plug 'dense-analysis/ale'
+Plug 'vim-airline/vim-airline'
+" Plug 'dense-analysis/ale'
 Plug 'preservim/nerdtree'
-Plug 'zivyangll/git-blame.vim'
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
+" Plug 'lanej/vim-phabricator'
 Plug 'ojroques/vim-oscyank'
-Plug 'Integralist/vim-mypy'
 Plug 'roguelazer/variables_file.vim'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive', { 'tag': 'v2.3' } " using v2.3 so it works with airline
+
+" Colors
+" Plug 'gruvbox-community/gruvbox'
+" Plug 'catppuccin/nvim', { 'tag': 'v0.2.4', 'as': 'catppuccin'}
+" Plug 'crusoexia/vim-monokai'
+Plug 'nordtheme/vim'
+
+" NOTES on getting fzf theme to match nord:
+" need to add `export BAT_THEME="Nord"` to your .bashrc
+" and, add `COLORTERM="truecolor"` to your .bashrc
+" https://github.com/junegunn/fzf.vim/issues/969#issuecomment-611611154
+
+
+" LSP-related plugins
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/vim-vsnip'
+
+" Go-related stuff
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
+
+" Vim devicons
 Plug 'ryanoasis/vim-devicons' " Always load the vim-devicons as the very last one.
  " Note: install the NERD font in OS X https://github.com/ryanoasis/nerd-fonts#font-installation
  " and set non-ASCII font to the installed font in your iTerm settings
-
-" Colors
-Plug 'gruvbox-community/gruvbox'
-Plug 'catppuccin/nvim', {'as': 'catppuccin'}
-Plug 'crusoexia/vim-monokai'
 call plug#end()
 
 " let g:coc_global_extensions = ['coc-json', 'coc-python', 'coc-yaml']
 let g:EasyGrepFilesToExclude = '*.swp,*~,*.venv,*.pyc,tags'
-" let g:python3_host_prog = "~/.venv/bin/python"
-let g:python3_host_prog = "/usr/bin/python"
+let g:python3_host_prog = "~/.venv/bin/python"
 let g:flake8_show_in_file = 1
 " let g:coc_diagnostic_disable=1
 " let g:coc_node_path = '~/.nvm/versions/node/v12.22.11/bin/node'
@@ -194,24 +215,20 @@ nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 
 " colorscheme gruvbox
-colorscheme catppuccin
+" colorscheme catppuccin
 " colorscheme monokai
+colorscheme nord
 
 " AUTO COMMANDS
 
 " On save call Isort
+let g:vim_isort_python_version = 'python3'
 autocmd BufWritePost * call Isort()
 function! Isort()
   if &filetype ==# 'python'
-    :Isort
+    " :Isort
   endif
 endfunction
-
-augroup CHEESYBACON
-    autocmd!
-    autocmd BufWritePre *.py %s/\s\+$//e  " clears whitespace on save
-    autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
-augroup END
 
 " This is the default extra key bindings
 let g:fzf_action = {
@@ -282,87 +299,6 @@ command! -bang -nargs=* GGrep
             \   'git grep --line-number '.shellescape(<q-args>), 0,
             \   fzf#vim#with_preview({'dir': systemlist('git rev-parse--show-toplevel')[0]}), <bang>0)
 
-map <Leader>z :call InsertLine()<CR>
-
-function! InsertLine()
-  " let trace = expand("import pdb; pdb.set_trace()")
-  let trace = expand("breakpoint()")
-  execute "normal o".trace
-endfunction
-
-map <Leader>x :call InsertSlackDebug()<CR>
-map <Leader>z :call InsertSlackJsonDebug()<CR>
-map <Leader>d :call InsertPythonDebug()<CR>
-map <Leader>p1 :call Insert1()<CR>
-map <Leader>p2 :call Insert2()<CR>
-map <Leader>p3 :call Insert3()<CR>
-map <Leader>p4 :call Insert4()<CR>
-map <Leader>p5 :call Insert5()<CR>
-map <Leader>p6 :call Insert6()<CR>
-map <Leader>p7 :call Insert7()<CR>
-map <Leader>p8 :call Insert8()<CR>
-map <Leader>n :!python -m json.tool<CR>
-
-function! FormatJson()
-  return ":!python -m json.tool"
-endfunction
-
-function! InsertPythonDebug()
-  let trace = expand("import pdb;pdb.set_trace()")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! InsertSlackJsonDebug()
-  let trace = expand("from htk import slack_debug_json;slack_debug_json()")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! InsertSlackDebug()
-  let trace = expand("from htk import slack_debug;slack_debug()")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! Insert1()
-  let trace = expand("from htk import fdebug; fdebug()")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! Insert2()
-  let trace = expand("from htk import fdebug; fdebug('22222222222222222222222')")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! Insert3()
-  let trace = expand("from htk import fdebug; fdebug('33333333333333333333333')")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! Insert4()
-  let trace = expand("from htk import fdebug; fdebug('44444444444444444444444')")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! Insert5()
-  let trace = expand("from htk import fdebug; fdebug('555555555555555555555555')")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! Insert6()
-  let trace = expand("from htk import fdebug; fdebug('666666666666666666666666')")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! Insert7()
-  let trace = expand("from htk import fdebug; fdebug('7777777777777777777777')")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-function! Insert8()
-  let trace = expand("from htk import fdebug; fdebug('88888888888888888888888')")
-  execute "normal o".trace
-  execute "normal t)"
-endfunction
-
 " Ack / Ag
 let g:ackprg = 'ag --vimgrep --smart-case'
 cnoreabbrev ag Ack!
@@ -373,8 +309,8 @@ cnoreabbrev AG Ack!
 let g:netrw_list_hide= '.git/*'
 
  " ale
-let g:ale_linters = {'python': ['flake8']}
-let g_ale_linters_explicit = 1
+" let g:ale_linters = {'python': ['flake8']}
+" let g_ale_linters_explicit = 1
 
  " VM visual multi
 let g:VM_maps = {}
@@ -385,10 +321,131 @@ let g:VM_maps["Select Cursor Up"]   = '<c-S-Up>'        " start selecting up
 
  " NERDTree
 let NERDTreeShowHidden=1
+nmap <leader>e :NERDTreeToggle<CR>
 
-nnoremap <Leader>s :<C-u>call gitblame#echo()<CR>
+ " Vim fugitive: Git Blame
+ " See https://github.com/tpope/vim-fugitive/tree/v2.3
+ " In newest version, can call :Git Blame
+nnoremap <Leader>s :Gblame<CR>
 
 " vim-oscyank (copy-paste with <leader>c, line with <leader>o_)
-let g:oscyank_term = 'default'
-vnoremap <leader>c :OSCYank<CR>
-nmap <leader>o <Plug>OSCYank
+nmap <leader>c <Plug>OSCYankOperator
+nmap <leader>cc <leader>c_
+vmap <leader>c <Plug>OSCYankVisual
+
+" Wrapped lines goes down/up to next row, rather than next line in file.
+" noremap j gj
+" noremap k gk
+
+" If I don't let off the shift key quick enough
+command! Q :q
+command! Qa :qa
+command! W :w
+command! Wa :wa
+command! Wqa :wqa
+command! Qwa :wqa
+command! E :e
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vim-go
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Golang
+augroup filetype_go
+  autocmd!
+
+  autocmd FileType go setlocal noexpandtab nolist shiftwidth=4 tabstop=4
+  
+  " from the vim-go-tutorial (https://github.com/fatih/vim-go-tutorial)
+  autocmd FileType go setlocal autowrite
+
+  " run :GoBuild or :GoTestCompile based on type of go file
+  function! s:build_go_files()
+    let l:file = expand('%')
+
+    echo l:file
+
+    if l:file =~# '^\f\+_test\.go$'
+      " call go#test#Test(0, 1) " doesn't work. it's verbatim from example.
+      GoTestCompile
+    elseif l:file =~# '^\f\+\.go$'
+      " call go#cmd#Build(0)
+      GoBuild
+    endif
+  endfunction
+
+  autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+  autocmd FileType go nmap <leader>r <Plug>(go-run)
+  autocmd FileType go nmap <leader>t <Plug>(go-test)
+  autocmd FileType go nmap <leader>c <Plug>(go-coverage-toggle)
+  autocmd FileType go nmap <leader>i <Plug>(go-info)
+  autocmd FileType go nmap <leader>C :GoCallers<CR>
+
+  autocmd FileType go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  autocmd FileType go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  autocmd FileType go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  autocmd FileType go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+
+  " navigate through vim-go's quickfix list
+  autocmd FileType go map <C-n>: cnext<CR>
+  autocmd FileType go map <C-m>: cprevious<CR>
+  autocmd FileType go nnoremap <leader>a :cclose<CR>
+
+  " let g:go_list_type = "quickfix" " Use the quickfix error windows only
+  let g:go_auto_sameids = 1 " highlight uses of selected identifier under cursor
+  let g:go_auto_type_info = 1 " show signature for function under cursor in status bar
+  let g:go_def_mode = 'gopls'
+  let g:go_fmt_command = "goimports" " combine go fmt with go import
+  let g:go_info_mode = 'gopls'
+  let g:go_rename_command = 'gopls'
+augroup END
+
+" NOTE: if you get a "no object found for ident" error, run :GoBuildTags ''
+
+
+"
+" NOTE: this would require specific plugins, see 'LSP-related plugins' above.
+"
+
+if &runtimepath =~ 'lspconfig'
+lua<<EOF
+  -- Setup autocompletion
+-- Based on README from https://github.com/hrsh7th/nvim-cmp
+local cmp = require'cmp'
+
+cmp.setup({
+  snippet = {
+    -- REQUIRED - you must specify a snippet engine
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+-- Setup lspconfig.
+-- Known configs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+-- Need to manually install each LSP implementation. See links for more info.
+local lspconfig = require('lspconfig')
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+-- https://github.com/golang/tools/tree/master/gopls
+lspconfig['gopls'].setup {
+  capabilities = capabilities
+}
+
+EOF
+endif
