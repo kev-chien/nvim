@@ -10,6 +10,7 @@ After the first step, the following steps are not in any proven or fully correct
 1. `git clone` this repo into your should be into your `~/.config`, so that you have a `~/.config/nvim/init.vim`
 2. figure out what python path and what pip path to use
     - on el8 instance, use `let g:python3_host_prog = "/usr/bin/python"`
+    - on mac, if `python3` installed, use `let g:python3_host_prog = "python3"`
     - use `pip3` which is linked to the python instance, to install the relevant packages
 3. install [vim-plug](https://github.com/junegunn/vim-plug)
     - run `nvim`
@@ -29,6 +30,10 @@ After the first step, the following steps are not in any proven or fully correct
     - mac: `brew install ripgrep`
     - ubuntu: `sudo apt install ripgrep`
 
+## Debugging steps:
+- Every time you modify your `init.vim`, you can run `:so` with that file open to reload the configs. Or, just restart `nvim`
+- Run `:checkhealth` to see if nvim is complaining about anything, and to see specific diagnosed problems or steps to solve them
+
 ## Python-specific install steps:
 1. install flake8 `pip install flake8`
 2. install isort `pip install isort`
@@ -45,6 +50,10 @@ After the first step, the following steps are not in any proven or fully correct
     <!-- TODO: add screenshot -->
 <img width="565" alt="Screen Shot 2022-04-11 at 12 29 41 PM" src="https://user-images.githubusercontent.com/20323625/229319844-5b69ab21-7b25-4535-8106-0d8dabcd98ed.png">
 
+## Go install steps:
+1. Make sure go >= 1.19 is installed on your machine
+2. With `nvim` open, run `:GoUpdateBinaries`
+3. See [vim-go cheatsheet](https://gist.github.com/krlvi/d22bdcb66566261ea8e8da36f796fa0a)
 
 ## Cool Commands this gives you
 
