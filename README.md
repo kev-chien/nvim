@@ -52,8 +52,23 @@ After the first step, the following steps are not in any proven or fully correct
 
 ## Go install steps:
 1. Make sure go >= 1.19 is installed on your machine
-2. With `nvim` open, run `:GoUpdateBinaries`
-3. See [vim-go cheatsheet](https://gist.github.com/krlvi/d22bdcb66566261ea8e8da36f796fa0a)
+2. Make sure `go` and go binaries (e.g. `gopls`, after nivm installs it) can be accessed from your PATH.
+    - You can add this to your `.bashrc` for el6:
+        ```
+        PATH=$PATH:/opt/golang1.19/bin
+        PATH=$PATH:/home/vagrant/go/bin/
+        ```
+    - Generally, e.g. for mac, add this to your `.bash_profile`:
+        ```
+        PATH=$PATH:~/go/bin/
+        ```
+3. With `nvim` open, run `:GoUpdateBinaries`. You may need to restart `nvim` to see everything working.
+   If everything was installed correctly, you should be able to see auto-completion and docstrings like these:
+   <img width="1100" alt="Screen Shot 2023-05-01 at 11 28 37 AM" src="https://user-images.githubusercontent.com/20323625/235506872-7f916b21-ce73-4b9a-9a52-6e4056138265.png">
+4. If you get this error: "Spawning language server with cmd: `gopls` failed. The language server is either not installed, missing from PATH, or not executable."
+    - Revisit step 2: You'll need to make sure you can access `gopls` from your PATH
+5. See [vim-go cheatsheet](https://gist.github.com/krlvi/d22bdcb66566261ea8e8da36f796fa0a)
+6. Also read the vim-go section of the `init.vim` to see custom mappings
 
 ## Cool Commands this gives you
 
