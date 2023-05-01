@@ -15,18 +15,17 @@ After the first step, the following steps are not in any proven or fully correct
 3. install [vim-plug](https://github.com/junegunn/vim-plug)
     - run `nvim`
     - run `:PlugInstall`
-4. install [node>=12](https://nodejs.org/en/download) (for CoC)
-5. install [fzf](https://github.com/junegunn/fzf)
+4. install [fzf](https://github.com/junegunn/fzf)
     - mac: `brew install fzf`
         - To install useful key bindings and fuzzy completion:
         - `$(brew --prefix)/opt/fzf/install`
     - ubuntu: `sudo apt install fzf`
-6. install [ag](https://github.com/ggreer/the_silver_searcher)
+5. install [ag](https://github.com/ggreer/the_silver_searcher)
     - mac: `brew install the_silver_searcher`
-7. install [ctags](https://github.com/universal-ctags/ctags)
+6. install [ctags](https://github.com/universal-ctags/ctags)
     - mac: `brew install --HEAD universal-ctags/universal-ctags/universal-ctags`
     - ubuntu: `sudo apt install universal-ctags`
-8. install [rg](https://github.com/BurntSushi/ripgrep)
+7. install [rg](https://github.com/BurntSushi/ripgrep)
     - mac: `brew install ripgrep`
     - ubuntu: `sudo apt install ripgrep`
 
@@ -69,6 +68,10 @@ After the first step, the following steps are not in any proven or fully correct
     - Revisit step 2: You'll need to make sure you can access `gopls` from your PATH
 5. See [vim-go cheatsheet](https://gist.github.com/krlvi/d22bdcb66566261ea8e8da36f796fa0a)
 6. Also read the vim-go section of the `init.vim` to see custom mappings
+
+## CoC
+- [CoC](https://github.com/neoclide/coc.nvim) configs are currently commented out.
+- if desired, un-comment and install [node>=12](https://nodejs.org/en/download)
 
 ## Cool Commands this gives you
 
