@@ -32,118 +32,19 @@ set updatetime=300
 set shortmess+=c
 set colorcolumn=120
 set completeopt=menu
-" set foldmethod=indent
-" set foldlevel=1
-" set foldclose=all
 set ignorecase
 set smartcase
-set spell spelllang=en_us
+" set spell spelllang=en_us
+set nospell " let spelunker plugin handle spellcheck
 set pastetoggle=<F2>
-
-" Set the filetype based on the filename, overriding any
-" 'filetype' that has already been set
-au BufRead,BufNewFile .env-override set filetype=sh
-au BufRead,BufNewFile .env-ci set filetype=sh
-au BufRead,BufNewFile .env-test set filetype=sh
+set nofoldenable
+set mouse=a
 
 syntax on
 
-" nnoremg, <C-o>
-" nnoremap g. <C-i>
-" MAPS
-let mapleader = " "
-nnoremap <leader>h :wincmd h<CR>
-nnoremap <leader>j :wincmd j<CR>
-nnoremap <leader>k :wincmd k<CR>
-nnoremap <leader>l :wincmd l<CR>
-nnoremap <leader>ghw :h <C-R>=expand("<cword>")<CR><CR>
-nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
-nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
-nnoremap <leader>u :UndotreeShow<CR>
-nnoremap <leader>pv :Ex<CR>
-nnoremap <Leader><CR> :so ~/.config/nvim/init.vim<CR>
-nnoremap <Leader>= :vertical resize +20<CR>
-nnoremap <Leader>- :vertical resize -20<CR>
-nnoremap <Leader>rp :resize 100<CR>
-nnoremap <Leader>ee oif err != nil {<CR>log.Fatalf("%+v\n", err)<CR>}<CR><esc>kkI<esc>
-nnoremap <Leader>cpu a%" PRIu64 "<esc>
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
-nnoremap <S-Up> :m-2<CR>
-nnoremap <S-Down> :m+<CR>
-inoremap <S-Up> <Esc>:m-2<CR>
-inoremap <S-Down> <Esc>:m+<CR>
-nnoremap <C-o> :Mru<CR>
-" greatest remap ever
-vnoremap <leader>p "_dP
-
-" next greatest remap ever : asbjornHaland
-nnoremap <leader>y "+y
-vnoremap <leader>y "+y
-nnoremap <leader>Y gg"+yG
-
-nnoremap <leader>d "_d
-vnoremap <leader>d "_d
-
-" for command mode
-nnoremap <S-Tab> <<
-nnoremap <Tab> >>
-" for insert mode
-inoremap <S-Tab> <C-d>
-
-nnoremap <Leader>7 :tabnew $MYVIMRC<cr>
-nnoremap <Leader>8 :tabnew ~/.gitignore<cr>
-nnoremap <Leader>9 :tabnew ~/.bashrc<cr>
-command! ClearQuickfixList cexpr []
-nmap <leader>cf :ClearQuickfixList<cr>
-
-map <silent> <leader>w :lua require('nvim-window').pick()<CR>
-
-" Go to tab by number
-noremap <leader>1 1gt
-noremap <leader>2 2gt
-noremap <leader>3 3gt
-noremap <leader>4 4gt
-noremap <leader>5 5gt
-noremap <leader>6 6gt
-noremap <c-S-Right> gt
-noremap <c-S-Left> gT
-
-" Go to last active tab
-au TabLeave * let g:lasttab = tabpagenr()
-nnoremap <silent> <c-l> :exe "tabn ".g:lasttab<cr>
-vnoremap <silent> <c-l> :exe "tabn ".g:lasttab<cr>
-" inoremap <silent><expr> <TAB>
-"      \ pumvisible() ? "\<C-n>" :
-"      \ <SID>check_back_space() ? "\<TAB>" :
-"      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" press // to search selected text in visual mode
-vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
-
-" tab sizes by language
-" for html/rb files, 2 spaces
-" autocmd Filetype html ts=2 sw=2 expandtab
-" autocmd Filetype ruby ts=2 sw=2 expandtab
-
-" Use <c-space> to trigger completion.
-" if has('nvim')
-"   inoremap <silent><expr> <c-space> coc#refresh()
-" else
-"   inoremap <silent><expr> <c-@> coc#refresh()
-" endif
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              " \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" xmap <leader>f  <Plug>(coc-format-selected)
-" nmap <leader>f  <Plug>(coc-format-selected)
-
-" PLUGINS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => VIM-PLUG
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin('~/.vim/plugged')
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'https://gitlab.com/yorickpeterse/nvim-window.git'
@@ -167,17 +68,25 @@ Plug 'vim-airline/vim-airline'
 Plug 'preservim/nerdtree'
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
-" Plug 'lanej/vim-phabricator'
-Plug 'ojroques/vim-oscyank'
+Plug 'ojroques/nvim-osc52'
+Plug 'ibhagwan/smartyank.nvim'
 Plug 'roguelazer/variables_file.vim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive', { 'tag': 'v2.3' } " using v2.3 so it works with airline
+Plug 'kamykn/spelunker.vim'
+Plug 'kamykn/popup-menu.nvim' " for spelunker
+" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+" Plug 'Pocco81/auto-save.nvim'
+Plug 'svban/YankAssassin.vim'
+Plug 'tpope/vim-rhubarb'
+Plug 'lanej/vim-phabricator'
 
 " Colors
 " Plug 'gruvbox-community/gruvbox'
 " Plug 'catppuccin/nvim', { 'tag': 'v0.2.4', 'as': 'catppuccin'}
 " Plug 'crusoexia/vim-monokai'
 Plug 'nordtheme/vim'
+Plug 'cormacrelf/vim-colors-github'
 
 " NOTES on getting fzf theme to match nord:
 " need to add `export BAT_THEME="Nord"` to your .bashrc
@@ -202,52 +111,130 @@ Plug 'ryanoasis/vim-devicons' " Always load the vim-devicons as the very last on
  " and set non-ASCII font to the installed font in your iTerm settings
 call plug#end()
 
-" let g:coc_global_extensions = ['coc-json', 'coc-python', 'coc-yaml']
-let g:EasyGrepFilesToExclude = '*.swp,*~,*.venv,*.pyc,tags'
-let g:python3_host_prog = "~/.venv/bin/python"
-let g:flake8_show_in_file = 1
-" let g:coc_diagnostic_disable=1
-" let g:coc_node_path = '~/.nvm/versions/node/v12.22.11/bin/node'
-
-
-" Hunks
-nmap ]h <Plug>(GitGutterNextHunk)
-nmap [h <Plug>(GitGutterPrevHunk)
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => COLORS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " colorscheme gruvbox
 " colorscheme catppuccin
 " colorscheme monokai
 colorscheme nord
 
-" AUTO COMMANDS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => MAPS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" On save call Isort
-let g:vim_isort_python_version = 'python3'
-autocmd BufWritePost * call Isort()
-function! Isort()
-  if &filetype ==# 'python'
-    " :Isort
-  endif
-endfunction
+let mapleader = " "
+nnoremap <leader>h :wincmd h<CR>
+nnoremap <leader>j :wincmd j<CR>
+nnoremap <leader>k :wincmd k<CR>
+nnoremap <leader>l :wincmd l<CR>
+nnoremap <leader>ghw :h <C-R>=expand("<cword>")<CR><CR>
+" nnoremap <leader>prw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+nnoremap <leader>bs /<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>
+nnoremap <Leader><CR> :so ~/.config/nvim/init.vim<CR>
+nnoremap <Leader>= :vertical resize +20<CR>
+nnoremap <Leader>- :vertical resize -20<CR>
 
-" This is the default extra key bindings
-let g:fzf_action = {
-            \ 'ctrl-t': 'tab split',
-            \ 'ctrl-x': 'split',
-            \ 'ctrl-v': 'vsplit' }
+" indents
+nnoremap <S-Tab> <<
+nnoremap <Tab> >>
+vnoremap <S-Tab> <gv
+vnoremap <Tab> >gv
+inoremap <S-Tab> <C-d>
 
-" Enable per-command history.
-" CTRL-N and CTRL-P will be automatically bound to next-history and
-" previous-history instead of down and up. If you don't like the change,
-" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
-let g:fzf_history_dir = '~/.local/share/fzf-history'
+" Vmap for maintain Visual Mode after shifting > and <
+vmap < <gv
+vmap > >gv
 
-map <C-p> :Files<CR>
+" Move visual block
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" Move one line
+nnoremap <S-Up> :m-2<CR>
+nnoremap <S-Down> :m+<CR>
+inoremap <S-Up> <Esc>:m-2<CR>
+inoremap <S-Down> <Esc>:m+<CR>
+
+command! ClearQuickfixList cexpr []
+nmap <leader>cf :ClearQuickfixList<cr>
+
+" Go to tab by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <c-S-Right> gt
+noremap <c-S-Left> gT
+
+nnoremap <Leader>7 :tabnew $MYVIMRC<cr>
+nnoremap <Leader>8 :tabnew ~/.gitignore<cr>
+nnoremap <Leader>9 :tabnew ~/.bashrc<cr>
+
+" Go to last active tab
+au TabLeave * let g:lasttab = tabpagenr()
+nnoremap <silent> <c-l> :exe "tabn ".g:lasttab<cr>
+vnoremap <silent> <c-l> :exe "tabn ".g:lasttab<cr>
+
+" press // to search selected text in visual mode
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+
+" buffers
 map <leader>b :Buffers<CR>
-nnoremap <C-f> :Rg<CR>
-nnoremap <leader>f :Rg <C-R><C-W><CR>
+
+" tags, marks
 nnoremap <leader>t :Tags<CR>
 nnoremap <leader>m :Marks<CR>
+
+" " Copy to clipboard
+vnoremap  <leader>y  "+y
+nnoremap  <leader>Y  gg"+yG
+nnoremap  <leader>y  "+y
+nnoremap  <leader>yy  "+yy
+
+" " Paste from clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>p "+p
+vnoremap <leader>P "+P
+
+" Wrapped lines goes down/up to next row, rather than next line in file.
+" noremap j gj
+" noremap k gk
+
+" If I don't let off the shift key quick enough
+command! Q :q
+command! Qa :qa
+command! W :w
+command! Wa :wa
+command! Wqa :wqa
+command! Qwa :wqa
+command! E :e
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => PLUGIN CONFIGS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+ " Undotree
+nnoremap <leader>u :UndotreeToggle<CR>
+
+ " Mru
+nnoremap <C-o> :Mru<CR>
+
+ " nvim-window
+map <silent> <leader>w :lua require('nvim-window').pick()<CR>
+
+ " rg
+nnoremap <C-f> :Rg<CR>
+nnoremap <leader>f :Rg <C-R><C-W><CR>
+
+ " Git Hunks
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+
+ " fzf
+map <C-p> :Files<CR>
 
 let g:fzf_tags_command = 'ctags -R --exclude=.git .'
 " Border color
@@ -272,7 +259,7 @@ let g:fzf_colors =
             \ 'spinner': ['fg', 'Label'],
             \ 'header':  ['fg', 'Comment'] }
 
-"Get Files
+" Get Files
 command! -bang -nargs=? -complete=dir Files
             \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
 
@@ -293,18 +280,32 @@ endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
-" Git grep
+" This is the default extra key bindings
+let g:fzf_action = {
+            \ 'ctrl-t': 'tab split',
+            \ 'ctrl-x': 'split',
+            \ 'ctrl-v': 'vsplit' }
+
+" Enable per-command history.
+" CTRL-N and CTRL-P will be automatically bound to next-history and
+" previous-history instead of down and up. If you don't like the change,
+" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+ " Git grep (broken?)
 command! -bang -nargs=* GGrep
             \ call fzf#vim#grep(
             \   'git grep --line-number '.shellescape(<q-args>), 0,
             \   fzf#vim#with_preview({'dir': systemlist('git rev-parse--show-toplevel')[0]}), <bang>0)
 
-" Ack / Ag
+ " Ack / Ag
 let g:ackprg = 'ag --vimgrep --smart-case'
 cnoreabbrev ag Ack!
 cnoreabbrev aG Ack!
 cnoreabbrev Ag Ack!
 cnoreabbrev AG Ack!
+
+vnoremap <Leader>a y:Ack! <C-r>=fnameescape(@")<CR><CR>
 
 let g:netrw_list_hide= '.git/*'
 
@@ -323,34 +324,95 @@ let g:VM_maps["Select Cursor Up"]   = '<c-S-Up>'        " start selecting up
 let NERDTreeShowHidden=1
 nmap <leader>e :NERDTreeToggle<CR>
 
- " Vim fugitive: Git Blame
- " See https://github.com/tpope/vim-fugitive/tree/v2.3
+ " Vim fugitive
+ " See https://github.com/tpope/vim-fugitive/tree/v2.3 (using v2.3 because of airline)
  " In newest version, can call :Git Blame
 nnoremap <Leader>s :Gblame<CR>
+nnoremap <Leader>o :Gbrowse!<CR>
+vnoremap <Leader>o :Gbrowse!<CR>
 
-" vim-oscyank (copy-paste with <leader>c, line with <leader>o_)
-nmap <leader>c <Plug>OSCYankOperator
-nmap <leader>cc <leader>c_
-vmap <leader>c <Plug>OSCYankVisual
+ " easygrep
+let g:EasyGrepFilesToExclude = '*.swp,*~,*.venv,*.pyc,tags'
 
-" Wrapped lines goes down/up to next row, rather than next line in file.
-" noremap j gj
-" noremap k gk
+ " flake8
+let g:flake8_show_in_file = 1
 
-" If I don't let off the shift key quick enough
-command! Q :q
-command! Qa :qa
-command! W :w
-command! Wa :wa
-command! Wqa :wqa
-command! Qwa :wqa
-command! E :e
+ " vim-phabricator
+let g:phabricator_hosts = [ "phab.easypo.net" ]
+let g:phabricator_api_token = $PHAB_TOKEN
+
+ " configs with lua
+lua<<EOF
+-- smartyank
+require('smartyank').setup {
+  osc52 = {
+    enabled = true,
+    ssh_only = true, -- OSC52 yank also in local sessions
+    silent = false,   -- false to disable the "n chars copied" echo
+  },
+  -- By default copy is only triggered by "intentional yanks" where the
+  -- user initiated a `y` motion (e.g. `yy`, `yiw`, etc). Set to `false`
+  -- if you wish to copy indiscriminately:
+  validate_yank = false,
+  -- 
+  -- For advanced customization set to a lua function returning a boolean
+  -- for example, the default condition is:
+  -- validate_yank = function() return vim.v.operator == "y" end,
+}
+
+-- osc52
+local function copy(lines, _)
+  require('osc52').copy(table.concat(lines, '\n'))
+end
+
+local function paste()
+  return {vim.fn.split(vim.fn.getreg(''), '\n'), vim.fn.getregtype('')}
+end
+
+vim.g.clipboard = {
+  name = 'osc52',
+  copy = {['+'] = copy, ['*'] = copy},
+  paste = {['+'] = paste, ['*'] = paste},
+}
+
+-- Now the '+' register will copy to system clipboard using OSC52
+vim.keymap.set('n', '<leader>c', '"+y')
+vim.keymap.set('n', '<leader>cc', '"+yy')
+EOF
+
+ " firenvim (for OSX only)
+" https://github.com/glacambre/firenvim/blob/132979166a02319f0b49815135e60a4e4599de91/README.md
+if exists('g:started_by_firenvim')
+  colorscheme github
+  set background=light
+  let g:github_colors_soft = 1
+  let g:airline_theme = "github"
+  set guifont=monospace:h23
+else
+    " colorscheme nord
+endif
+au BufEnter github.com_*.txt set filetype=markdown
+au BufEnter phab.easypo.net_*.txt set filetype=markdown
+au BufEnter go.dev_play_*.txt set filetype=go
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => vim-go
+" => LANGUAGE-SPECIFIC
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Golang
+" Python
+let g:python3_host_prog = "~/.venv/bin/python"
+
+" On save call Isort
+let g:vim_isort_python_version = 'python3'
+autocmd BufWritePost * call Isort()
+function! Isort()
+  if &filetype ==# 'python'
+    :Isort
+  endif
+endfunction
+
+
+" Golang / vim-go
 augroup filetype_go
   autocmd!
 
@@ -375,16 +437,27 @@ augroup filetype_go
   endfunction
 
   autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
-  autocmd FileType go nmap <leader>r <Plug>(go-run)
+  autocmd FileType go nmap <leader>ru <Plug>(go-run)
   autocmd FileType go nmap <leader>t <Plug>(go-test)
   autocmd FileType go nmap <leader>c <Plug>(go-coverage-toggle)
   autocmd FileType go nmap <leader>i <Plug>(go-info)
   autocmd FileType go nmap <leader>C :GoCallers<CR>
+  autocmd FileType go nmap <leader>re :GoReferrers<CR>
+  autocmd FileType go nmap <Leader>i <Plug>(go-info)
+  autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
+  autocmd FileType go nmap <C-g> :GoDecls<cr>
+  autocmd FileType go nmap <leader>dr :GoDeclsDir<cr>
+  autocmd FileType go imap <C-g> <esc>:<C-u>GoDecls<cr>
+  autocmd FileType go imap <leader>dr <esc>:<C-u>GoDeclsDir<cr>
 
   autocmd FileType go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
   autocmd FileType go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
   autocmd FileType go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
   autocmd FileType go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+
+  autocmd FileType go nmap <leader>ds <Plug>(go-def-split)
+  autocmd FileType go nmap <leader>dv <Plug>(go-def-vertical)
+  autocmd FileType go nmap <leader>dt <Plug>(go-def-tab)
 
   " navigate through vim-go's quickfix list
   autocmd FileType go map <C-n>: cnext<CR>
@@ -449,3 +522,16 @@ lspconfig['gopls'].setup {
 
 EOF
 endif
+
+" Ruby
+augroup vimrc-ruby
+  autocmd!
+  autocmd BufNewFile,BufRead *.rb,*.rbw,*.gemspec setlocal filetype=ruby
+  autocmd FileType ruby set tabstop=2|set shiftwidth=2|set expandtab softtabstop=2
+augroup END
+
+" .env-* files
+au BufRead,BufNewFile .env-override set filetype=sh
+au BufRead,BufNewFile .env-ci set filetype=sh
+au BufRead,BufNewFile .env-test set filetype=sh
+
