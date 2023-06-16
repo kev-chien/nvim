@@ -388,6 +388,13 @@ if exists('g:started_by_firenvim')
   let g:github_colors_soft = 1
   let g:airline_theme = "github"
   set guifont=monospace:h23
+
+  " fix paste
+  tmap <D-v> <C-w>"+
+  nnoremap <D-v> "+p
+  vnoremap <D-v> "+p
+  inoremap <D-v> <C-R><C-O>+
+  cnoremap <D-v> <C-R><C-O>+
 else
     " colorscheme nord
 endif
