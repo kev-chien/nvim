@@ -227,10 +227,6 @@ nnoremap <C-o> :Mru<CR>
  " nvim-window
 map <silent> <leader>w :lua require('nvim-window').pick()<CR>
 
- " rg
-nnoremap <C-f> :Rg<CR>
-nnoremap <leader>f :Rg <C-R><C-W><CR>
-
  " Git Hunks
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
@@ -281,6 +277,9 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+nnoremap <C-f> :Rg<CR>
+nnoremap <leader>f :Rg <C-R><C-W><CR>
 
 " This is the default extra key bindings
 let g:fzf_action = {
