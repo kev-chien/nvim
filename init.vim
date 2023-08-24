@@ -184,7 +184,7 @@ vnoremap <silent> <c-l> :exe "tabn ".g:lasttab<cr>
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 " buffers
-map <leader>b :Buffers<CR>
+map <c-b> :Buffers<CR>
 
 " tags, marks
 nnoremap <leader>t :Tags<CR>
@@ -202,9 +202,19 @@ nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P
 
-" Wrapped lines goes down/up to next row, rather than next line in file.
-" noremap j gj
-" noremap k gk
+" " c goes to black hole register
+nnoremap c "_c
+vnoremap c "_c
+
+" " x goes to black hole register
+nnoremap x "_x
+vnoremap x "_x
+
+" Wrapped lines go down/up to next row, rather than next line in file, if count is 0.
+nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+vnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+vnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 
 " If I don't let off the shift key quick enough
 command! Q :q
@@ -214,6 +224,9 @@ command! Wa :wa
 command! Wqa :wqa
 command! Qwa :wqa
 command! E :e
+
+" Yank filename to system clipboard
+nnoremap <leader>n :let @+ = expand("%")<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => PLUGIN CONFIGS
@@ -230,6 +243,10 @@ map <silent> <leader>w :lua require('nvim-window').pick()<CR>
  " Git Hunks
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
+
+ " vim-commentary
+ " this is because I have <Cmd-/> mapped to gcl, which is primarily for Visual mode
+nmap gcl gcc
 
  " fzf
 map <C-p> :Files<CR>
@@ -377,8 +394,8 @@ vim.g.clipboard = {
 }
 
 -- Now the '+' register will copy to system clipboard using OSC52
-vim.keymap.set('n', '<leader>c', '"+y')
-vim.keymap.set('n', '<leader>cc', '"+yy')
+vim.keymap.set('v', '<leader>y', '"+y')
+vim.keymap.set('n', '<leader>yy', '"+yy')
 EOF
 
  " firenvim (for OSX only)
@@ -449,14 +466,15 @@ augroup filetype_go
   autocmd FileType go nmap <leader>t <Plug>(go-test)
   autocmd FileType go nmap <leader>c <Plug>(go-coverage-toggle)
   autocmd FileType go nmap <leader>i <Plug>(go-info)
-  autocmd FileType go nmap <leader>C :GoCallers<CR>
-  autocmd FileType go nmap <leader>re :GoReferrers<CR>
+  autocmd FileType go nmap <C-c> :GoCallers<CR>
+  autocmd FileType go nmap <leader>rf :GoReferrers<CR>
+  autocmd FileType go nmap <leader>re :GoRename<CR>
   autocmd FileType go nmap <Leader>i <Plug>(go-info)
   autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
   autocmd FileType go nmap <C-g> :GoDecls<cr>
   autocmd FileType go nmap <leader>dr :GoDeclsDir<cr>
   autocmd FileType go imap <C-g> <esc>:<C-u>GoDecls<cr>
-  autocmd FileType go imap <leader>dr <esc>:<C-u>GoDeclsDir<cr>
+  " autocmd FileType go imap <leader>dr <esc>:<C-u>GoDeclsDir<cr>
 
   autocmd FileType go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
   autocmd FileType go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
