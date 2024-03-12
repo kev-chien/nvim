@@ -20,7 +20,7 @@ set incsearch
 set termguicolors
 set scrolloff=8
 set signcolumn=yes
-set cursorline
+" set cursorline
 set isfname+=@-@
 set ls=0
 set laststatus=2
@@ -74,14 +74,21 @@ Plug 'ojroques/nvim-osc52'
 Plug 'ibhagwan/smartyank.nvim'
 Plug 'roguelazer/variables_file.vim'
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-fugitive', { 'tag': 'v2.3' } " using v2.3 so it works with airline
 Plug 'kamykn/spelunker.vim'
 Plug 'kamykn/popup-menu.nvim' " for spelunker
+Plug 'bkad/CamelCaseMotion'
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 " Plug 'Pocco81/auto-save.nvim'
 Plug 'svban/YankAssassin.vim'
 Plug 'tpope/vim-rhubarb'
 Plug 'lanej/vim-phabricator'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+Plug 'AndrewRadev/switch.vim' " switches / flips true and false, using gs
 
 " Colors
 " Plug 'gruvbox-community/gruvbox'
@@ -120,6 +127,15 @@ call plug#end()
 " colorscheme catppuccin
 " colorscheme monokai
 colorscheme nord
+" Workaround for creating transparent bg - see https://stackoverflow.com/a/67569365
+autocmd SourcePost * highlight Normal     ctermbg=NONE guibg=NONE
+        \ |    highlight LineNr     ctermbg=NONE guibg=NONE
+        \ |    highlight SignColumn ctermbg=NONE guibg=NONE
+        \ |    highlight CursorLine ctermbg=NONE guibg=NONE
+        \ |    highlight CursorColumn ctermbg=NONE guibg=NONE
+        \ |    highlight ColorColumn ctermbg=NONE guibg=NONE
+        \ |    highlight TabLine ctermbg=NONE guibg=NONE
+        \ |    highlight TabLineFill ctermbg=NONE guibg=NONE
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => MAPS
@@ -158,6 +174,9 @@ nnoremap <S-Down> :m+<CR>
 inoremap <S-Up> <Esc>:m-2<CR>
 inoremap <S-Down> <Esc>:m+<CR>
 
+" paste without overwriting register
+xnoremap p P
+
 command! ClearQuickfixList cexpr []
 nmap <leader>cf :ClearQuickfixList<cr>
 
@@ -168,12 +187,14 @@ noremap <leader>3 3gt
 noremap <leader>4 4gt
 noremap <leader>5 5gt
 noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
 noremap <c-S-Right> gt
 noremap <c-S-Left> gT
 
-nnoremap <Leader>7 :tabnew $MYVIMRC<cr>
-nnoremap <Leader>8 :tabnew ~/.gitignore<cr>
-nnoremap <Leader>9 :tabnew ~/.bashrc<cr>
+nnoremap <Leader>v :tabnew $MYVIMRC<cr>
+nnoremap <Leader>b :tabnew ~/.bashrc<cr>
 
 " Go to last active tab
 au TabLeave * let g:lasttab = tabpagenr()
@@ -341,6 +362,7 @@ let g:VM_maps["Select Cursor Up"]   = '<c-S-Up>'        " start selecting up
  " NERDTree
 let NERDTreeShowHidden=1
 nmap <leader>e :NERDTreeToggle<CR>
+nmap <leader>r :NERDTreeFind<cr>
 
  " Vim fugitive
  " See https://github.com/tpope/vim-fugitive/tree/v2.3 (using v2.3 because of airline)
@@ -359,6 +381,29 @@ let g:flake8_show_in_file = 1
 let g:phabricator_hosts = [ "phab.easypo.net" ]
 let g:phabricator_api_token = $PHAB_TOKEN
 
+" CamelCaseMotion
+"" norml mode
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+map <silent> ge <Plug>CamelCaseMotion_ge
+sunmap w
+sunmap b
+sunmap e
+sunmap ge
+
+"" insert mode
+omap <silent> iw <Plug>CamelCaseMotion_iw
+xmap <silent> iw <Plug>CamelCaseMotion_iw
+omap <silent> ib <Plug>CamelCaseMotion_ib
+xmap <silent> ib <Plug>CamelCaseMotion_ib
+omap <silent> ie <Plug>CamelCaseMotion_ie
+xmap <silent> ie <Plug>CamelCaseMotion_ie
+
+" Switch.vim
+" note that this is a default plugin mapping in normal mode: gs to switch true and false (think of it as go switch)
+
+" smartyank
  " configs with lua
 lua<<EOF
 -- smartyank
@@ -423,6 +468,21 @@ au BufEnter go.dev_play_*.txt set filetype=go
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => LANGUAGE-SPECIFIC
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" LanguageClient-neovim
+let g:LanguageClient_serverCommands = {
+    \ 'ruby': ['/opt/ruby2.7/bin/solargraph', 'stdio'],
+    \ }
+
+
+" note that if you are using Plug mapping you should not use `noremap` mappings.
+nmap <F5> <Plug>(lcn-menu)
+" Or map each action separately
+nmap <silent>K <Plug>(lcn-hover)
+nmap <silent> gd <Plug>(lcn-definition)
+nmap <silent> <C-]> <Plug>(lcn-definition)
+nmap <silent> <leader>re <Plug>(lcn-rename)
+nmap <silent> <leader>rf <Plug>(lcn-references)
+nmap <silent> <leader>dr <Plug>(lcn-symbols)
 
 " Python
 let g:python3_host_prog = "~/.venv/bin/python"
@@ -465,11 +525,11 @@ augroup filetype_go
   autocmd FileType go nmap <leader>ru <Plug>(go-run)
   autocmd FileType go nmap <leader>t <Plug>(go-test)
   autocmd FileType go nmap <leader>c <Plug>(go-coverage-toggle)
-  autocmd FileType go nmap <leader>i <Plug>(go-info)
   autocmd FileType go nmap <C-c> :GoCallers<CR>
+  autocmd FileType go nmap <leader>i :GoImplements<CR>
   autocmd FileType go nmap <leader>rf :GoReferrers<CR>
   autocmd FileType go nmap <leader>re :GoRename<CR>
-  autocmd FileType go nmap <Leader>i <Plug>(go-info)
+  " autocmd FileType go nmap <Leader>i <Plug>(go-info)
   autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
   autocmd FileType go nmap <C-g> :GoDecls<cr>
   autocmd FileType go nmap <leader>dr :GoDeclsDir<cr>
