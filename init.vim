@@ -80,7 +80,7 @@ Plug 'preservim/vim-markdown'
 Plug 'ojroques/nvim-osc52'
 Plug 'ibhagwan/smartyank.nvim'
 Plug 'roguelazer/variables_file.vim'
-Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-eunuch' " file manipulation
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-fugitive', { 'tag': 'v2.3' } " using v2.3 so it works with airline
 Plug 'kamykn/spelunker.vim'
@@ -96,6 +96,12 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': 'bash install.sh',
     \ }
 Plug 'AndrewRadev/switch.vim' " switches / flips true and false, using gs
+Plug 'PeterRincker/vim-argumentative' " for shifting arguments with >, ; <,
+Plug 'mracos/mermaid.vim'
+Plug 'vmchale/just-vim'
+Plug 'github/copilot.vim'
+Plug 'nvim-lua/plenary.nvim'
+ Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
 
 " Colors
 " Plug 'gruvbox-community/gruvbox'
@@ -233,6 +239,10 @@ vnoremap <leader>P "+P
 " " c goes to black hole register
 nnoremap c "_c
 vnoremap c "_c
+
+" " s goes to black hole register
+nnoremap s "_s
+vnoremap s "_s
 
 " " x goes to black hole register
 nnoremap x "_x
@@ -472,12 +482,28 @@ au BufEnter github.com_*.txt set filetype=markdown
 au BufEnter phab.easypo.net_*.txt set filetype=markdown
 au BufEnter go.dev_play_*.txt set filetype=go
 
+" github/copilot.vim
+let g:copilot_node_command = "$NVM_DIR/versions/node/v20.17.0/bin/node"
+let g:copilot_filetypes = {
+  \ }
+let g:copilot_workspace_folders = 
+  \ ["~/code/easypost"]
+
+lua << EOF
+ require("CopilotChat").setup {
+   debug = true, -- Enable debugging
+   -- See Configuration section for rest
+ }
+EOF
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => LANGUAGE-SPECIFIC
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" LanguageClient-neovim
+" Ruby (using Solargraph + LanguageClient-neovim)
+" Install solargraph by running:
+" sudo gem install solargraph
 let g:LanguageClient_serverCommands = {
-    \ 'ruby': ['/opt/ruby2.7/bin/solargraph', 'stdio'],
+    \ 'ruby': ['solargraph', 'stdio'],
     \ }
 
 
@@ -529,6 +555,7 @@ augroup filetype_go
   endfunction
 
   autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+  autocmd FileType go nmap <leader>bt :GoBuildTags ''<CR>
   autocmd FileType go nmap <leader>ru <Plug>(go-run)
   autocmd FileType go nmap <leader>t <Plug>(go-test)
   autocmd FileType go nmap <leader>c <Plug>(go-coverage-toggle)
@@ -553,9 +580,9 @@ augroup filetype_go
   autocmd FileType go nmap <leader>dt <Plug>(go-def-tab)
 
   " navigate through vim-go's quickfix list
-  autocmd FileType go map <C-n>: cnext<CR>
-  autocmd FileType go map <C-m>: cprevious<CR>
-  autocmd FileType go nnoremap <leader>a :cclose<CR>
+  autocmd FileType go nmap ]e :cnext<CR>
+  autocmd FileType go nmap [e :cprevious<CR>
+  " autocmd FileType go nnoremap <leader>a :cclose<CR>
 
   " let g:go_list_type = "quickfix" " Use the quickfix error windows only
   let g:go_auto_sameids = 1 " highlight uses of selected identifier under cursor
@@ -627,4 +654,5 @@ augroup END
 au BufRead,BufNewFile .env-override set filetype=sh
 au BufRead,BufNewFile .env-ci set filetype=sh
 au BufRead,BufNewFile .env-test set filetype=sh
+au BufRead,BufNewFile .env-epci-mysql57 set filetype=sh
 
