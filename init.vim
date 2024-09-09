@@ -101,7 +101,8 @@ Plug 'mracos/mermaid.vim'
 Plug 'vmchale/just-vim'
 Plug 'github/copilot.vim'
 Plug 'nvim-lua/plenary.nvim'
- Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+Plug 'christoomey/vim-tmux-navigator'
 
 " Colors
 " Plug 'gruvbox-community/gruvbox'
