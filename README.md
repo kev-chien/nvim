@@ -1,3 +1,7 @@
+# ⚠️ DEPRECATED ⚠️
+
+This repository is deprecated. Please visit [kev-chien/dotfiles](https://github.com/kev-chien/dotfiles) for where I now store my latest nvim configs.
+
 # Nvim Configs
 My nvim configs.
 
